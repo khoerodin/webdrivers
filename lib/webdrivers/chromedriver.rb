@@ -98,10 +98,16 @@ module Webdrivers
       end
 
       def apple_filename(driver_version)
-        if apple_m1_compatible?(driver_version)
-          driver_version >= normalize_version('106.0.5249.61') ? 'mac_arm64' : 'mac64_m1'
+        unless apple_m1_compatible?(driver_version)
+          return driver_version >= normalize_version('115') ? 'mac-x64' : 'mac64'
+        end
+
+        if driver_version < normalize_version('106.0.5249.61')
+          'mac64_m1'
+        elsif driver_version < normalize_version('115')
+          'mac_arm64'
         else
-          'mac64'
+          'mac-arm64'
         end
       end
 
